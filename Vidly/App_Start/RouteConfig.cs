@@ -7,17 +7,28 @@ using System.Web.Routing;
 
 namespace Vidly
 {
-	public class RouteConfig
-	{
-		public static void RegisterRoutes(RouteCollection routes)
-		{
-			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+    public class RouteConfig
+    {
+        public static void RegisterRoutes(RouteCollection routes)
+        {
+            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-			routes.MapRoute(
-				name: "Default",
-				url: "{controller}/{action}/{id}",
-				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-			);
-		}
-	}
+            routes.MapMvcAttributeRoutes();
+
+            ////OLD METHOD PRIOR TO MVC5
+            ////PRONE TO ERROR IF ACTION NAME IS CHANGED IN CONTROLLER
+            //routes.MapRoute(
+            //    "MoviesByReleaseDate",
+            //    "movies/released/{year}/{month}",
+            //    new { controller = "Movies", action = "ByReleaseDate" },
+            //    new { year = @"\d{4}", month = @"\d{2}" }           // Enforcing certain conditions on Parameters
+            //);
+
+            routes.MapRoute(
+                name: "Default",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+            );
+        }
+    }
 }
