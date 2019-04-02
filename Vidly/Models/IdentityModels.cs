@@ -23,7 +23,10 @@ namespace Vidly.Models
 		//Adding DBSet for Customer Domain Class
 		public DbSet<Customer> Customers { get; set; }
 
-		public ApplicationDbContext()
+        //Adding DbSet for Movies Class
+        public DbSet<Movie> Movies { get; set; }
+
+        public ApplicationDbContext()
 			: base("DefaultConnection", throwIfV1Schema: false)
 		{
 		}
