@@ -22,5 +22,8 @@ namespace Vidly.Models
 
 		//Adding Id to the name, EF will recognize it correctly as Foreign Key
 		public byte MembershipTypeId { get; set; }
-	}
+
+        //Adding Nullable Birthdate Property
+        public DateTime? Birthdate { get; set; }
+    }
 }

@@ -39,7 +39,7 @@ namespace Vidly.Controllers
 
 		public ActionResult Details(int id)
 		{
-			var customer = _context.Customers.SingleOrDefault(c => c.Id == id);
+			var customer = _context.Customers.Include(c => c.MembershipType).SingleOrDefault(c => c.Id == id);
 
 			if (customer == null)
 				return HttpNotFound();
@@ -47,14 +47,15 @@ namespace Vidly.Controllers
 			return View(customer);
 		}
 
-		//Commenting this as we are now getting data from DB
-		//private IEnumerable<Customer> GetCustomers()
-		//{
-		//	return new List<Customer>
-		//	{
-		//		new Customer { Id = 1, Name = "John Smith" },
-		//		new Customer { Id = 2, Name = "Mary Williams" }
-		//	};
-		//}
-	}
+        //Commenting this as we are now getting data from DB
+        //private IEnumerable<Customer> GetCustomers()
+        //{
+        //	return new List<Customer>
+        //	{
+        //		new Customer { Id = 1, Name = "John Smith" },
+        //		new Customer { Id = 2, Name = "Mary Williams" }
+        //	};
+        //}
+        //Sql("UPDATE Customers SET Birthdate = CAST('1980-01-01' AS DATETIME) WHERE Id = 1");
+    }
 }
