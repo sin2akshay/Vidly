@@ -1,25 +1,37 @@
-﻿@model IEnumerable<Vidly.Models.Movie>
+﻿@using System.Activities.Expressions
+@using Vidly.Models
+@model IEnumerable<Vidly.Models.Movie>
 
 @{
-    ViewBag.Title = "Movies";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = "Movies";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Movies</h2>
-<table class="table table-bordered table-hover">
-    <thead>
-        <tr>
-            <th>Movie</th>
-            <th>Genre</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var movie in Model)
-        {
-            <tr>
-                <td>@Html.ActionLink(movie.Name, "Details", "Movies", new { id = movie.Id }, null)</td>
-                <td>@movie.Genre.Name</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<p>
+	@Html.ActionLink("Add Movie", actionName: "New", controllerName: "Movies", routeValues: null, htmlAttributes: new { @class = "btn btn-primary"})
+</p>
+@if (!Model.Any())
+{
+	<p>Sorry, We are out of Movies at the moment.</p>
+}
+else
+{
+	<table class="table table-bordered table-hover">
+		<thead>
+		<tr>
+			<th>Movie</th>
+			<th>Genre</th>
+		</tr>
+		</thead>
+		<tbody>
+		@foreach (var movie in Model)
+		{
+			<tr>
+				<td>@Html.ActionLink(movie.Name, actionName: "Edit", controllerName: "Movies", routeValues: new {id = movie.Id}, htmlAttributes: null)</td>
+				<td>@movie.Genre.Name</td>
+			</tr>
+		}
+		</tbody>
+	</table>
+}
