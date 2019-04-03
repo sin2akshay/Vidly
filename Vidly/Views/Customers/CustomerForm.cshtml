@@ -1,0 +1,38 @@
+﻿@model Vidly.ViewModels.CustomerFormViewModel
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>New Customer</h2>
+
+@using (Html.BeginForm("Create", "Customers"))
+{
+    <div class="form-group">
+        @*
+            Here we pass a lambda expression that specifies the name of the target property in the model used in this view.
+            'm' in below line is model
+        *@
+        @Html.LabelFor(m => m.Customer.Name)
+
+        @*
+            Now here as the second argument to the TextBoxFor method we can pass an anonymous object and any properties we
+            add to this object will be rendered as HTML attributes. Since class is a reserved keyword, we prefix with @
+        *@
+        @Html.TextBoxFor(m => m.Customer.Name, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Customer.Birthdate)
+        @Html.TextBoxFor(m => m.Customer.Birthdate, "{0:d MMM yyyy}", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Customer.MembershipTypeId)
+        @Html.DropDownListFor(m => m.Customer.MembershipTypeId, new SelectList(Model.MembershipTypes, "Id", "Name"), "Select Membership Type", new { @class = "form-control" })
+    </div>
+    <div class="checkbox">
+        <label>
+            @Html.CheckBoxFor(m => m.Customer.IsSubscribedToNewsletter) Subscribed to the Newsletter?
+        </label>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+}

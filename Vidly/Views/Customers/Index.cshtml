@@ -33,7 +33,7 @@ else
 		@foreach (var customer in Model)
 		{
 			<tr>
-				<td>@Html.ActionLink(customer.Name, "Details", "Customers", new { id = customer.Id }, null)</td>
+				<td>@Html.ActionLink(customer.Name, "Edit", "Customers", new { id = customer.Id }, null)</td>
 				@*
 					The below line would give error as EF only loads customer object
 					and not their related objects. We will get a Null Reference Exception.

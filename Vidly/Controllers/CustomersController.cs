@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using Vidly.Models;
+using Vidly.ViewModels;
 
 namespace Vidly.Controllers
 {
@@ -24,6 +25,28 @@ namespace Vidly.Controllers
 			_context.Dispose();
 		}
 
+		public ActionResult New()
+		{
+			var membershipTypes = _context.MembershipTypes.ToList();
+
+			var viewModel = new CustomerFormViewModel
+			{
+				MembershipTypes = membershipTypes
+			};
+
+			return View("CustomerForm", viewModel);
+		}
+
+		[HttpPost]
+		public ActionResult Create(Customer customer)
+		{
+			_context.Customers.Add(customer);
+			_context.SaveChanges();
+
+			return RedirectToAction("Index","Customers");
+		}
+
+
 		public ViewResult Index()
 		{
 			/*This Customers property is a DB defined in our DBContext, with this we can get all the Customers in the DB.
@@ -31,8 +54,6 @@ namespace Vidly.Controllers
 			 * the customers object. If we want the query to be executed here only, we will have to add .ToList().
 			 */
 			var customers = _context.Customers.Include(c => c.MembershipType).ToList();
-			
-
 
 			return View(customers);
 		}
@@ -47,15 +68,34 @@ namespace Vidly.Controllers
 			return View(customer);
 		}
 
-        //Commenting this as we are now getting data from DB
-        //private IEnumerable<Customer> GetCustomers()
-        //{
-        //	return new List<Customer>
-        //	{
-        //		new Customer { Id = 1, Name = "John Smith" },
-        //		new Customer { Id = 2, Name = "Mary Williams" }
-        //	};
-        //}
-        //Sql("UPDATE Customers SET Birthdate = CAST('1980-01-01' AS DATETIME) WHERE Id = 1");
-    }
+		public ActionResult Edit(int id)
+		{
+			var customer = _context.Customers.SingleOrDefault( c => c.Id == id);
+
+			if (customer == null)
+			{
+				return HttpNotFound();
+			}
+
+			var viewModel = new CustomerFormViewModel
+			{
+				Customer = customer,
+				MembershipTypes = _context.MembershipTypes.ToList()
+			};
+
+			//Explicitly mentioning view that we need to return else it will look for view named Edit for this Action
+			return View("CustomerForm", viewModel);
+		}
+
+		//Commenting this as we are now getting data from DB
+		//private IEnumerable<Customer> GetCustomers()
+		//{
+		//	return new List<Customer>
+		//	{
+		//		new Customer { Id = 1, Name = "John Smith" },
+		//		new Customer { Id = 2, Name = "Mary Williams" }
+		//	};
+		//}
+		//Sql("UPDATE Customers SET Birthdate = CAST('1980-01-01' AS DATETIME) WHERE Id = 1");
+	}
 }
