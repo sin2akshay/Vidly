@@ -10,8 +10,8 @@ namespace Vidly.Models
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            //This gives us access to the containing class
-            //Since its an object cast to Customer
+            //Validation Context gives us access to the containing class
+            //Since its an object we cast it to Customer
             var customer = (Customer)validationContext.ObjectInstance;
 
             //Checking selected MembershipType
@@ -30,9 +30,6 @@ namespace Vidly.Models
             return (age > 18)
                 ? ValidationResult.Success
                 : new ValidationResult("Customers should be atleast 18 years old to go on a membership");
-
-
-            return base.IsValid(value, validationContext);
         }
     }
 }

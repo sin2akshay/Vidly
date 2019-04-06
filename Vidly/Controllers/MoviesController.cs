@@ -56,18 +56,28 @@ namespace Vidly.Controllers
 				return HttpNotFound();
 			}
 
-			var viewModel = new MovieFormViewModel()
+			var viewModel = new MovieFormViewModel(movie)
 			{
-				Genres = _context.Genres.ToList(),
-				Movie = movie
+				Genres = _context.Genres.ToList()
 			};
 
 			return View("MovieForm",viewModel);
 		}
 
 		[HttpPost]
+		[ValidateAntiForgeryToken]
 		public ActionResult Save(Movie movie)
 		{
+			if (!ModelState.IsValid)
+			{
+				var viewModel = new MovieFormViewModel(movie)
+				{
+					Genres = _context.Genres.ToList()
+				};
+
+				return View("MovieForm", viewModel);
+			}
+
 			if (movie.Id == 0)
 			{
 				movie.DateAdded = DateTime.Now;
@@ -76,17 +86,15 @@ namespace Vidly.Controllers
 			else
 			{
 				var movieInDb = _context.Movies.Single(m => m.Id == movie.Id);
-
-				//TryUpdateModel(movieInDb);
-				//Mapper.Map(movie, movieInDb);
 				movieInDb.Name = movie.Name;
-				movieInDb.ReleaseDate = movie.ReleaseDate;
 				movieInDb.GenreId = movie.GenreId;
 				movieInDb.NumberInStock = movie.NumberInStock;
+				movieInDb.ReleaseDate = movie.ReleaseDate;
 			}
+
 			_context.SaveChanges();
 
-			return RedirectToAction("Index","Movies");
+			return RedirectToAction("Index", "Movies");
 		}
 
 		public ActionResult Details(int id)
