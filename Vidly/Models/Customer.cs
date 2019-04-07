@@ -14,6 +14,7 @@ namespace Vidly.Models
 		[Required]
 		[StringLength(255)]
 		public string Name { get; set; }
+
 		public bool IsSubscribedToNewsletter { get; set; }
 		
 		//Now associating our Customer class to Membership Type
